@@ -1,0 +1,10 @@
+attributes along with the foreign keys
+
+Customer: custID, fname, lname, address, contactNum, emailAddress, birthDate, licenseNum, userID
+Service Provider: spID, fname, lname, eAddress, contact, bDay, userID
+Users: userID, username, password, userType
+Car: carID, brandCar, typeCar, yearCar, numSeat, modelCar, mileage, transmission, rate, spID
+Transaction: transID, timeStamp, status, payID, resID
+Payment: payID, payDate, totalAmount, paidAmount, miscFee, custID, resID
+Reservation: resID, startDate, endDate, purpose, custID,carID
+
