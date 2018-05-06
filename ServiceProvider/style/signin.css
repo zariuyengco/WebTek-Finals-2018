@@ -1,0 +1,95 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #FFF8ED;
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+@font-face{
+    font-family: aktiv;
+    src: url(../fonts/aktiv.ttf);
+}
+
+@font-face{
+    font-family: lemonlight;
+    src: url(../fonts/lemonlight.otf);
+}
+
+#service{
+  font-family: lemonlight;
+}
+
+#sign{
+  font-family: lemonlight;
+}
+
+#signin{
+  font-family: lemonlight;
+  letter-spacing: 1px;
+}
+
+#signup{
+  font-family: lemonlight;
+  letter-spacing: 1px;
+}
+
+#new{
+  font-family: aktiv;
+  font-weight: bold;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+#create{
+  font-family: aktiv;
+}
+
+#link a{
+  text-decoration: none;
+}
+
+
+
+
+
+
+
+
