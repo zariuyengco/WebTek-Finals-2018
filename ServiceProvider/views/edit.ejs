@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Create</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="style/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="style/form-validation.css" rel="stylesheet">
+    <link href="style/product.css" rel="stylesheet">
+  </head>
+
+  <body class="bg-light">
+
+    <% include partial/nav %>
+
+    <div class="container">
+      <div class="page-header">
+        <h2>Edit a Rental</h2>
+      </div>
+
+      <div class="form-group">
+        <form action="/editService" method="post" class="needs-validation" novilate>
+          <div class="row">     
+               <div class="col-md-3 mb-3">
+              <label for="brand">Brand of Car</label>
+                <select class="custom-select d-block w-100" required name="brand">
+                  <option><%= carValues.brandCar %></option>
+                   <option>Choose...</option>
+                    <option>Toyata</option>
+                    <option>Nissan</option>
+                    <option>Chevrolet</option>
+                    <option>Hyundai</option>
+                    <option>Honda</option>
+                    <option>Ford</option>
+                    <option>Kia</option>
+                    <option>Mazda</option>
+                    <option>Mitsubishi</option>
+                </select>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <label for="type">Type of Car</label>
+                <select class="custom-select d-block w-100" required name="type">      
+                  <option><%= carValues.typeCar %></option>
+                   <option>Choose...</option>
+                    <option>Sedan</option>
+                    <option>Van</option>
+                    <option>Pick-Up</option>
+                    <option>SUV</option>
+                    <option>MUV / MPV</option>
+                    <option>Hatchback</option>
+                    <option>Crossover</option>
+                    <option>Coupe</option>
+                </select>
+                </select>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <label for="model">Model of Car</label>
+                <input type="text" name="model" required size="15" value="<%= carValues.modelCar %>" name="model">              
+            </div>
+          </div>
+
+          <div class="page-header"></div>
+
+          <div class="row">
+            <div class="col-md-3 mb-3">
+              <label for="trans">Transmission</label>
+                <select class="custom-select d-block w-100" required name="transmission">          
+                  <option><%= carValues.transmission %></option>
+                  <option>Choose...</option>
+                  <option>Automatic</option>
+                  <option>Manual</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 mb-3">
+              <label for="num">Number of Seats</label>
+                <select class="custom-select d-block w-100" required name="num"> 
+                  <option><%= carValues.numSeat %></option>
+                   <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 mb-3">
+              <label for="year">Year of Car</label>
+                <select class="custom-select d-block w-100" required name="year">
+                  <option><%= carValues.yearCar %></option> 
+                  <option>2010</option>
+                  <option>2011</option>
+                  <option>2012</option>
+                  <option>2013</option>
+                  <option>2014</option>
+                  <option>2015</option>
+                  <option>2016</option>
+                  <option>2017</option>
+                  <option>2018</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 mb-3">
+              <label for="mil">Mileage</label>
+                <input type="text" name="mileage" required value="<%= carValues.mileage %>" size="15" name="mileage">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2 mb-3">
+              <label for="rate">Rate</label>
+              <input type="text" name="rate" required value="<%= carValues.rate %>" size="15" name="rate">
+            </div>
+
+             <div class="col-md-3 mb-3">
+              <label for="status">Status of Car</label>
+                <select class="custom-select d-block w-100" required name="status">      
+                  <option><%= carValues.carStatus %></option>
+                  <option>Available</option>
+                  <option>Rented</option>
+                  <option>Under Repair</option>
+                </select>
+            </div>
+          </div>
+
+          <div class="page-header">
+            <button class="btn btn-secondary" type="Submit">Submit</button>
+            <a class="btn btn-secondary" href="/main">Cancel</a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+    <div class="page-header"></div>
+
+    
+
+    <% include partial/footer %> 
+  </body>
+</html>
+

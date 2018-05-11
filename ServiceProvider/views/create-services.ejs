@@ -11,6 +11,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="style/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <!-- Custom styles for this template -->
     <link href="style/form-validation.css" rel="stylesheet">
@@ -22,147 +23,118 @@
     <% include partial/nav %>
 
     <div class="container">
-      <div class="py-5 text-center">
-        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-        <h2>Rentals Offered</h2>
-        <p class="lead">Create a new Rental</p>
+      <div class="page-header">
+        <h2>Create a Rental</h2>
       </div>
 
-      <div class="row">
-        <div class="col-md-4 order-md-2 mb-4">
-          <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-muted">List of Rentals</span>
-            <span class="badge badge-secondary badge-pill"></span>
-          </h4>
-          <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">Service Offered</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">Price</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">Service Offered</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">Price</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">Service Offered</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">Price</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">Service Offered</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">Price</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">Service Offered</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">Price</span>
-            </li>
-            
-          </ul>
+      <div class="form-group">
+        <form action="/createService" method="post" class="needs-validation" novilate>
+          <div class="row">
 
-          <form class="card p-2">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search Rentals">
-              <div class="input-group-append">
-                <button type="submit" class="btn btn-secondary">Search</button>
-              </div>
+              <div class="col-md-3 mb-3">
+              <label for="brand">Brand of Car</label>
+                <select class="custom-select d-block w-100" name="brand" required>
+                  <option>Choose...</option>
+                  <option>Toyata</option>
+                  <option>Nissan</option>
+                  <option>Chevrolet</option>
+                  <option>Hyundai</option>
+                  <option>Honda</option>
+                  <option>Ford</option>
+                  <option>Kia</option>
+                  <option>Mazda</option>
+                  <option>Mitsubishi</option>
+                </select>
             </div>
-          </form>
-        </div>
-        <div class="col-md-8 order-md-1">
-          <h4 class="mb-3">Create a Service</h4>
-          <form class="needs-validation" novalidate>
 
-            <div class="row">
-              <div class="col-md-5 mb-3">
-                <label for="country">Type of Car</label>
-                <select class="custom-select d-block w-100" id="country" required>
-                  <option value="">Choose...</option>
-                  <option>soemthing here</option>
+            <div class="col-md-3 mb-3">
+              <label for="type">Type of Car</label>
+                <select class="custom-select d-block w-100" name="type" required>
+                  <option>Choose...</option>
+                  <option>Sedan</option>
+                  <option>Van</option>
+                  <option>Pick-Up</option>
+                  <option>SUV</option>
+                  <option>MUV / MPV</option>
+                  <option>Hatchback</option>
+                  <option>Crossover</option>
+                  <option>Coupe</option>
                 </select>
-                <div class="invalid-feedback">
-                  Please select a valid country.
-                </div>
-              </div>
-              <div class="col-md-5 mb-3">
-                <label for="country">Brand of Car</label>
-                <select class="custom-select d-block w-100" id="country" required>
-                  <option value="">Choose...</option>
-                  <option>soemthing here</option>
-                </select>
-                <div class="invalid-feedback">
-                  Please select a valid country.
-                </div>
-              </div>
-              <div class="col-md-5 mb-3">
-                <label for="country">Model of Car</label>
-                <select class="custom-select d-block w-100" id="country" required>
-                  <option value="">Choose...</option>
-                  <option>soemthing here</option>
-                </select>
-                <div class="invalid-feedback">
-                  Please select a valid country.
-                </div>
-              </div>
-              <div class="col-md-4 mb-3">
-                <label for="state">Number of Passengers</label>
-                <select class="custom-select d-block w-100" id="state" required>
-                  <option value="">Choose...</option>
-                  <option>California</option>
-                </select>
-                <div class="invalid-feedback">
-                  Please provide a valid state.
-                </div>
-              </div>
-              <div class="mb-3">
-              <label for="username">Price per Day</label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">P</span>
-                </div>
-                <input type="text" class="form-control" id="username" placeholder="Username" required>
-                <div class="invalid-feedback" style="width: 100%;">
-                  Price is required.
-                </div>
-              </div>
             </div>
-            </div>
-            <hr class="mb-4">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="same-address">
-              <label class="custom-control-label" for="same-address">Payment: cash only </label>
-            </div>
-            <hr class="mb-4">
 
-           
-            <hr class="mb-4">
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Create Rental </button>
-          </form>
-        </div>
+            <div class="col-md-3 mb-3">
+              <label for="model">Model of Car</label>
+               <input type="text" name="model" required size="15">
+            </div>
+          </div>
+
+          <div class="page-header"></div>
+
+          <div class="row">
+            <div class="col-md-3 mb-3">
+              <label for="trans">Transmission</label>
+                <select class="custom-select d-block w-100" name="transmission" required>
+                  <option>Choose...</option>
+                  <option>Automatic</option>
+                  <option>Manual</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 mb-3">
+              <label for="num">Number of Seats</label>
+                <select class="custom-select d-block w-100" name="num" required>
+                  <option>Choose...</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option>8</option>
+                  <option>9</option>
+                  <option>10</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 mb-3">
+              <label for="year">Year of Car</label>
+                <select class="custom-select d-block w-100" name="year" required>
+                  <option>Choose...</option>
+                  <option>2010</option>
+                  <option>2011</option>
+                  <option>2012</option>
+                  <option>2013</option>
+                  <option>2014</option>
+                  <option>2015</option>
+                  <option>2016</option>
+                  <option>2017</option>
+                  <option>2018</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 mb-3">
+              <label for="mil">Mileage (Miles)</label>
+               <input type="text" name="mileage" required size="15">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2 mb-3">
+              <label for="rate">Rate per Day</label>
+              <input type="text" name="rate" required size="15">
+            </div>
+          </div>
+
+          <div class="page-header">
+            <button class="btn btn-secondary" type="Submit">Submit</button>
+          </div>
+
+        </form>
       </div>
     </div>
 
-      <footer class="my-5 pt-5 text-muted text-center text-small">
-        <p class="mb-1">&copy; CarGo 2018</p>
-        <ul class="list-inline">
-          <li class="list-inline-item"><a href="#">Privacy</a></li>
-          <li class="list-inline-item"><a href="#">Terms</a></li>
-          <li class="list-inline-item"><a href="#">Support</a></li>
-        </ul>
-      </footer>  
+    <div class="page-header"></div>
+
+    
+
+    <% include partial/footer %> 
   </body>
 </html>
 

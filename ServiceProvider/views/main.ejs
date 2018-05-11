@@ -11,6 +11,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="style/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <!-- Custom styles for this template -->
     <link href="style/product.css" rel="stylesheet">
@@ -21,6 +22,70 @@
   <body>
 
    <% include partial/nav %>
+
+        <div class="container-fluid">
+          <div class="page-header">
+            <h1>Welcome, CarGo Service Provider</h1>
+          </div>
+
+          <% if(serviceUsers.length != 0) {%>
+          <h2>Service Provider Profile</h2>
+          <table class="table table-hover">
+            <tr>
+              <th>Username</th>
+              <th>Service Provider ID</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>Contact Number</th>
+            </tr>
+            <% serviceUsers.forEach(function(item){ %>
+            <tr>
+              <td><%= item.username %></td>
+              <td><%= item.spID %></td>
+              <td><%= item.firstName %></td>
+              <td><%= item.lastName %></td>
+              <td><%= item.email %></td>
+              <td><%= item.contactNo %></td>
+            </tr>
+            <% }) %>
+          </table>
+          <% } %>
+
+
+          <% if(serviceCars.length != 0) {%>
+          <h1>Car Rentals Offered</h1>
+          <table class="table table-hover">
+            <tr>
+              <th>Car Brand</th>
+              <th>Car Type</th>
+              <th>Car Model</th>
+              <th>Number of Seats</th>
+              <th>Transmission</th>
+              <th>Mileage</th>
+              <th>Year of Car</th>
+              <th>Rate per Day</th>
+              <th>Car Status</th>
+              <th><a class="btn btn-secondary
+                " href="/create-services">ADD</a></th>
+            </tr>
+            <% serviceCars.forEach(function(item){ %>
+            <tr>
+              <td><%= item.brandCar %></td>
+              <td><%= item.typeCar %></td>
+              <td><%= item.modelCar %></td>
+              <td><%= item.numSeat %></td>
+              <td><%= item.transmission %></td>
+              <td><%= item.mileage %></td>
+              <td><%= item.yearCar %></td>
+              <td><%= item.rate %></td>
+              <td><%= item.carStatus %></td>
+              <td><a class="btn btn-secondary" href="/edit?carID=<%= item.carID %>">Edit</a></td>
+            </tr>
+            <% }) %>
+          </table>
+          <% } %>
+        </div>
 
    <% include partial/footer %>
   </body>
