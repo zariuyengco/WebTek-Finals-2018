@@ -1,0 +1,93 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Payment</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="style/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="style/product.css" rel="stylesheet">
+  </head>
+
+  <body class="bg-light">
+
+    <% include partial/nav %>
+
+      <div class="container-fluid">
+        <div class="page-header">
+          <h1>Payments</h1>
+          <a id="addpay" class="btn btn-secondary" href="/add-payment">Add Payment</a>    
+        </div>
+
+
+        <% if(paid.length != 0) { %>
+        <h2>Paid Payments</h2>
+        <table class="table table-hover">
+          <tr>
+            <th>Payment ID</th>
+            <th>Customer Name</th>
+            <th>Service Provider Name</th>
+            <th>Total Amount</th>
+            <th>Paid Amount</th>
+            <th>Date Paid</th>
+            <th>Miscellaneous Fee</th>
+            <th>Payment Status</th>
+          </tr>
+          <% paid.forEach(function(item){ %>
+          <tr>
+            <td><%= item.payID %></td>
+            <td><%= item.customerName %></td>
+            <td><%= item.providerName %></td>
+            <td><%= item.totalAmount %></td>
+            <td><%= item.paidAmount %></td>
+            <td><%= item.payDate %></td>
+            <<td><%= item.miscFee %></td>
+            <td><%= item.payStatus %></td>
+          </tr>
+          <% }) %>
+        </table>
+        <% } %>
+
+
+        <h2>Partial Payments</h2>
+        <table class="table table-hover">
+          <tr>
+            <th>Payment ID</th>
+            <th>Customer Name</th>
+            <th>Service Provider Name</th>
+            <th>Total Amount</th>
+            <th>Paid Amount</th>
+            <th>Date Paid</th>
+            <th>Miscellaneous Fee</th>
+            <th>Payment Status</th>
+          </tr>
+          <% partial.forEach(function(item){ %>
+          <tr>
+            <td><%= item.payID %></td>
+            <td><%= item.customerName %></td>
+            <td><%= item.providerName %></td>
+            <td><%= item.totalAmount %></td>
+            <td><%= item.paidAmount %></td>
+            <td><%= item.payDate %></td>
+            <<td><%= item.miscFee %></td>
+            <td><%= item.payStatus %></td>
+          </tr>
+          <% }) %>
+        </table>    
+      </div>
+
+
+      <div class="page-header"></div>
+
+    <% include partial/footer %>
+  </body>
+</html>

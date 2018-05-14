@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Add Payment</title>
+	<link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<!-- probably an include statement here for the header of the  -->
+	<% include partial/nav %>
+    <div class="container">
+	<h1>ADD Payment</h1>
+    <div class="form-group">
+	<form action="/add-payment" method="post">
+		<label for="email">Service Provider:</label>
+		<input class="form-control" type="text" name="service" value="" required><br>
+		<label for="Cname">Customer Name:</label>
+		<input class="form-control" type="text" name="firstName" placeholder="First Name" required><input class="form-control" type="text" name="lastName" placeholder="Last Name" required><br>
+		<label for="firstName">Total Amount:</label>
+		<input class="form-control" type="text" name="totalAmount" value="" required><br>
+		<label for="lastName">Paid Amount:</label>
+		<input class="form-control" type="text" name="paidAmount" placeholder="Paid Amount" required><br>
+		<label for="contactNumber">Miscellaneous Fee:</label>
+		<input class="form-control" type="text" name="miscFee" placeholder="Miscellaneous Fee" required><br>
+		<input type="text" name="userType" value="Service Provider" hidden>
+		<input type="submit" class="btn">
+		<a class="btn btn-secondary" href="/payment">Cancel</a>
+	</form>
+    </div>
+
+
+    <% include partial/footer %>
+</body>
+</html>

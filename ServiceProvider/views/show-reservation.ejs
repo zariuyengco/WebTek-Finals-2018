@@ -27,61 +27,90 @@
           <h1> Show Reservations</h1>    
         </div>
 
+
         <% if(showReservations.length != 0) { %>
-        <h2>Reservation List</h2>
+        <h2>Ongoing Reservations</h2>
         <table class="table table-hover">
           <tr>
+            <th>Reservation ID</th>
             <th>Customer Name</th>
             <th>Reservation Date</th>
             <th>Customer Address</th>
             <th>Customer Contact Number</th>
-            <th>Start Date Rental</th>
-            <th>End Date Rental</th>
-            <th>Purpose</th>
             <th>Reservation Status</th>
           </tr>
           <% showReservations.forEach(function(item){ %>
           <tr>
+            <td><%= item.resID %></td>
             <td><%= item.customerName %></td>
             <td><%= item.reservedDate %></td>
             <td><%= item.address %></td>
             <td><%= item.contactNo %></td>
-            <td><%= item.startDate %></td>
-            <td><%= item.endDate %></td>
-            <td><%= item.purpose %></td>
             <td><%= item.resStatus %></td>
           </tr>
           <% }) %>
         </table>  
-       
+       <% } %>
       </div>
 
       <div class="page-header"></div>
 
       <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-11">
         <h2>Pending Reservations</h2>
         <table class="table table-hover">
           <tr>
-            <th>Reservation ID</th>
+            <th>Customer Name</th>
+            <th>Customer ContactNo</th>
             <th>Service Provider Name</th>
-            <th>Service Provider Contact Number</th>
+            <th>Service Provider ContactNo</th>
             <th>Car Rented</th>
+            <th>Mileage</th>
+            <th>Car Rate</th>
+            <th>Purpose</th>
             <th></th>
             <th></th>
           </tr>
           <% pendReserve.forEach(function(item){ %>
           <tr>
-            <td><%= item.resID %></td>
+            <td><%= item.customerName %></td>
+            <td><%= item.cContact %></td>
             <td><%= item.serviceName %></td>
-            <td><%= item.contactNo %></td>
-            <td><%= item.brandCar %> <%= item.typeCar %> <%= item.modelCar %> <%= item.mileage %> <%= item.rate %></td>
-            <td><form action="/accept" method="post"><input type="text" hidden name="resID" type="text" value=""><input class="btn btn-secondary" type="submit" value="Accept"></form></td>
-            <td><form action="/deny" method="post"><input type="text" value="" hidden name="resID"><input class="btn btn-secondary" type="submit" value="Deny"></form></td>
+            <td><%= item.spContactNo %></td>
+            <td><%= item.brandCar %> <%= item.typeCar %> <%= item.modelCar %></td>
+            <td><%= item.mileage %></td>
+            <td><%= item.rate %></td>
+            <td><%= item.purpose %></td>
+            <td><form action="/accept" method="post"><input type="text" hidden name="resID" type="text" value="<%= item.resID %>"><input class="btn btn-secondary" type="submit" value="Accept"></form></td>
+            <td><form action="/deny" method="post"><input type="text" value="<%= item.resID %>" hidden name="resID"><input class="btn btn-secondary" type="submit" value="Deny"></form></td>
           </tr>
           <% }) %>
         </table> 
-        <% } %>  
+          
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <h2>Reservation Dates</h2>
+          <table class="table table-hover">
+            <tr>
+              <th>Reservation ID</th>
+              <th>Start Ddate</th>
+              <th>End Date</th>
+              <th></th>
+            </tr>
+
+            <tr>
+              <% date.forEach(function(item){ %>
+              <td><%= item.resID %></td>
+              <td><%= item.startDate %></td>
+              <td><%= item.endDate %></td>
+              <td><form action="/done" method="post"><input type="text" hidden name="resID" type="text" value="<%= item.resID %>"><input class="btn btn-secondary" type="submit" value="Done"></form></td>
+            </tr>
+              <% }) %>
+          </table>
+          
         </div>
       </div>
     
