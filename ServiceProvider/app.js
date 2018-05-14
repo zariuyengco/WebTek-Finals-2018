@@ -120,7 +120,7 @@ app.post('/login', function(req, res){
 		if (err) {console.error(err); return}
 
 		var valid = false;
-		console.log(rows);
+		//console.log(rows);
 		rows.forEach(function(item){
 			if(item.username == username && item.password == password){
 				valid = true;
@@ -385,7 +385,6 @@ app.get('/payment', function(req, res){
 					totalAmount: item.totalAmount,
 					paidAmount: item.paidAmount,
 					miscFee: item.miscFee,
-					payStatus: item.payDate,
 					customerName: item.customerName,
 					providerName: item.providerName,
 					payStatus: item.payStatus
@@ -402,10 +401,9 @@ app.get('/payment', function(req, res){
 						totalAmount: item.totalAmount,
 						paidAmount: item.paidAmount,
 						miscFee: item.miscFee,
-						payStatus: item.payDate,
+						payStatus: item.payStatus,
 						customerName: item.customerName,
-						providerName: item.providerName,
-						payStatus: item.payStatus
+						providerName: item.providerName
 					});
 				});
 				res.render('payment', {paid: paid, partial: partial});
@@ -419,7 +417,22 @@ app.get('/payment', function(req, res){
 
 app.get('/add-payment', function(req, res){
 	if (req.session.username){
-		res.render('add-payment');
+		var user = req.session.username;
+
+		connection.query('SELECT username, userID, CONCAT(firstName, " ", lastName) AS providerName FROM users JOIN service_provider ON spID = userID', function(err, row1){
+			if (err) {console.log(err); return}
+
+			var name = {};
+			row1.forEach(function(item){
+				if (item.username == user){
+					name = {
+						userID: item.userID,
+						providerName: item.providerName
+					}
+				}
+				res.render('add-payment', {name: name});
+			});
+		});
 	}else {
 		res.redirect('/login');
 	}
@@ -427,8 +440,17 @@ app.get('/add-payment', function(req, res){
 
 
 app.post('/add-payment', function(req, res){
-	connection.query('')
-})
+	var payColumns = ['payID', 'firstName', 'lastName', 'paidAmount'];
+	var payValues = [results.insertID, req.body.firstName, req.body.lastName, req.body.paidAmount];
+	connection.query('INSERT INTO paymentdetails (??) VALUES (?)', [payColumns, payValues], function(err, results){
+		if (err) {console.log(err); return}
+		
+		res.redirect('/payment');
+	});
+});
+
+
+
 
 
 

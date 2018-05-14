@@ -15,8 +15,8 @@
 	<h1>ADD Payment</h1>
     <div class="form-group">
 	<form action="/add-payment" method="post">
-		<label for="email">Service Provider:</label>
-		<input class="form-control" type="text" name="service" value="" required><br>
+		<label for="service">Service Provider:</label>
+		<input class="form-control" type="" name="service" value="<%= name.providerName %>" disabled><br>
 		<label for="Cname">Customer Name:</label>
 		<input class="form-control" type="text" name="firstName" placeholder="First Name" required><input class="form-control" type="text" name="lastName" placeholder="Last Name" required><br>
 		<label for="firstName">Total Amount:</label>
