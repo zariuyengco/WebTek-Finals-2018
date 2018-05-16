@@ -1,0 +1,20 @@
+* {
+	text-align: center;
+}
+
+body {
+	background-color: #85929E;
+}
+
+#home {
+	background-image: url("../images/9.jpg"); 
+    background-repeat: no-repeat;	
+    background-attachment: relative; 
+}
+
+/*
+.position-relative {
+	background-color: rgba(0,0,0,0.1);
+}
+
+*/
