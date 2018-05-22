@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="style/icons/car.png">
+
+    <title>Sign Up</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="style/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="style/signin.css" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+    <form class="form-signin" action="/register" method="post">
+      <h1 class="h3 mb-3 font-weight-normal" id="sign">Sign Up as Servcie Provider</h1>
+
+      <% if(userObject != null){ %>
+
+        <input value="<%= userObject.username %>" type="text" class="form-control" placeholder="Username" required autofocus name="username">
+        <% if(userObject.userError != ""){ %>        
+          <p><%= userObject.usernameError %></p>
+        <% } %>
+        <br>
+
+        <input value="<%= userObject.email %>" type="text" class="form-control" placeholder="Email" required name="email"><br>
+        
+        <input value="<%= userObject.firstName %>" type="text" class="form-control" placeholder="First Name" required name="firstname">
+        
+        <input value="<%= userObject.lastName %>" type="text" class="form-control" placeholder="Last Name" required name="lastname"><br>
+
+        <input value="<%= userObject.contactNumber %>" type="text" class="form-control" placeholder="Contact Number" required name="contact"><br>
+        
+        <input value="<%= userObject.password %>" type="password" class="form-control" placeholder="Password" required name="password">
+      
+        <input type="password" id="inputPassword" class="form-control" placeholder="Retype Password" required name="retype">
+        <% if(userObject.passwordError != ""){ %>        
+          <p><%= userObject.passwordError %></p>
+        <% } %>
+      <br>
+       <input type="text" name="userType" value="Service Provider" hidden>
+
+
+      <% } else { %>
+        <input type="text" class="form-control" placeholder="Username" required autofocus name="username"><br>
+
+        <input type="text" class="form-control" placeholder="Email" required name="email"><br>
+        
+        <input type="text" class="form-control" placeholder="First Name" required name="firstname">
+        
+        <input type="text" class="form-control" placeholder="Last Name" required name="lastname"><br>
+
+        <input type="text" class="form-control" placeholder="Contact Number" required name="contact"><br>
+        
+        <input type="password" class="form-control" placeholder="Password" required name="password">
+      
+        <input type="password" id="inputPassword" class="form-control" placeholder="Retype Password" required name="retype">
+      <br>
+       <input type="text" name="userType" value="Service Provider" hidden>
+      <% } %>
+      <input type="submit" class="btn btn-lg btn-primary btn-block" id="signup">
+      <a href="/login" class="btn">Cancel</a>
+      <p class="mt-5 mb-3 text-muted">&copy; CarGo 2018</p>
+    </form>
+  </body>
+</html>

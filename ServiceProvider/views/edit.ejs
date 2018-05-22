@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
+    <link rel="icon" href="style/icons/car.png">
 
     <title>Edit</title>
 
@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
 
   <body class="bg-light">
@@ -113,12 +114,17 @@
               <label for="mil">Mileage</label>
                 <input type="text" name="mileage" required value="<%= carValues.mileage %>" size="15" name="mileage">
             </div>
+
+            <div class="col-md-2 mb-3">
+              <label for="quantity">Car Quantity</label>
+              <input type="text" name="quantity" value="<%=carValues.carQuantity %>" size="15" required>
+            </div>
           </div>
 
           <div class="row">
             <div class="col-md-2 mb-3">
               <label for="rate">Rate</label>
-              <input type="text" name="rate" required value="<%= carValues.rate %>" size="15" name="rate">
+              <input type="text" name="rate" required value="<%= carValues.rate %>" size="15">
             </div>
 
              <div class="col-md-3 mb-3">
@@ -129,8 +135,14 @@
                   <option>Rented</option>
                   <option>Under Repair</option>
                 </select>
+              </div>
+
+             <div class="col-md-2 mb-3">
+              <label for="quantity">Status Quantity</label>
+              <input type="text" name="stats" value="<%=carValues.statusQuantity %>" size="15" required>
             </div>
-          </div>
+            </div>
+
 
           <div class="page-header">
             <button class="btn btn-secondary" type="Submit">Submit</button><input hidden type="text" name="carID" value="<%= carValues.carID%>">

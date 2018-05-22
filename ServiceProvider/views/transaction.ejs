@@ -5,18 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
+    <link rel="icon" href="style/icons/car.png">
 
     <title>Transaction Monitoring</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <link href="style/product.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
 
   <body>
@@ -28,34 +24,34 @@
             <h2>Transaction Monitoring</h2>
           </div>
 
+          <br>
           <div class="row">
               <div class="col-md-3 ">
                 <form class="form-inline" action="/search-transaction-status" method="post">
                   <div class="form-group">
                     <select class="form-control" name="status">
                         <option value="">Choose Status</option>
-                        <option value="done">Done</option>
-                        <option value="denied">Denied</option>
-                        <option value="cancelled">Cancelled</option>
+                        <option value="fully paid">Fully Paid</option>
+                        <option value="partially paid">Partially Paid</option>
                     </select>
                     <input type="submit" value="Search" class="btn">
                   </div>
                 </form>
               </div>
           </div>
-          
+          <br>
          <% if (transactions.length !=0){ %>
           <table class="table table-hover">
-            <tr>
+            <tr class="thead-light">
               <th>Transaction Number</th>
               <th>Customer Name</th>
               <th>Service Provider Name</th>
               <th>Date Started</th>
-              <th>Date Finished</th>
+              <th>Proposed End Date</th>
               <th>Transaction Status</th>
             </tr>
             <% transactions.forEach(function(item){%>
-            <tr>
+            <tr class="table-info">
               <td><%= item.transID %></td>
               <td><%= item.customerName %></td>
               <td><%= item.providerName %></td>

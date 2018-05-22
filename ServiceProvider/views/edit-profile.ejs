@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+   <link rel="icon" href="style/icons/car.png">
+
+    <title>Sign Up</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="style/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="style/signin.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+
+  <body class="text-center">
+    <form class="form-signin" action="/edit-profile" method="post">
+      <h1 class="h3 mb-3 font-weight-normal" id="sign">Edit</h1>
+
+      <input type="text" class="form-control" value="<%= serviceUsers.username %>" autofocus name="username"><br>
+
+      <input type="text" class="form-control" value="<%= serviceUsers.email %>" required name="email"><br>
+      
+      <input type="text" class="form-control" value="<%= serviceUsers.firstName %>" required name="firstname">
+      
+      <input type="text" class="form-control" value="<%= serviceUsers.lastName %>" required name="lastname"><br>
+
+      <input type="text" class="form-control" value="<%= serviceUsers.contactNo %>" required name="contact"><br>
+      
+      <input type="password" class="form-control" value="<%= serviceUsers.password %>" required name="password">
+    
+      <input type="password" id="inputPassword" class="form-control" value="<%= serviceUsers.password %>" required name="retype">
+    <br>
+     <input type="text" name="spID" value="<%= serviceUsers.spID %>" hidden>
+
+      <input type="submit" class="btn btn-lg btn-primary btn-block" id="signup">
+      <a href="/login" class="btn">Cancel</a>
+      <p class="mt-5 mb-3 text-muted">&copy; CarGo 2018</p>
+    </form>
+  </body>
+</html>

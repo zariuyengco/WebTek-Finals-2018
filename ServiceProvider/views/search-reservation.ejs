@@ -1,0 +1,83 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="style/icons/car.png">
+
+    <title>Show</title>
+
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <link href="style/product.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+
+  <body class="bg-light">
+
+    <% include partial/nav %>
+
+    <br>
+
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col-md-3 ">
+          <form class="form-inline" action="/search-reservation" method="post">
+            <div class="form-group">
+              <select class="form-control" name="status">
+                  <option value="">Choose Status</option>
+                  <option value="accepted">Accepted</option>
+                  <option value="denied">Denied</option>
+                  <option value="ongoing">Ongoing</option>
+                  <option value="pending">Pending</option>
+              </select>
+             <a href="/search-reservation"><input type="submit" value="Search" class="btn"></a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-md-11">
+        <h2>Reservations</h2>
+        <% if(reservation.length != 0) { %>
+        <table class="table table-bordered">
+          <tr class="thead-light">
+            <th>Reservation ID</th>
+            <th>Customer Name</th>
+            <th>Customer Contact Number</th>
+            <th>Customer Address</th>
+            <th>Reservation Date</th>
+            <th>Car Rented</th>
+            <th>Date to Start</th>
+            <th>Proposed End Date</th>
+            <th>Reservation Status</th>
+          </tr>
+          <% reservation.forEach(function(item){ %>
+          <tr class="table-info">
+            <td><%= item.resID %></td>
+            <td><%= item.customerName %></td>
+            <td><%= item.contactNo %></td>
+            <td><%= item.address %></td>
+            <td><%= item.reservedDate %></td>
+            <td><%= item.brandCar %> <%= item.typeCar %> <%= item.modelCar %></td>
+            <td><%= item.startDate %></td>
+            <td><%= item.endDate %></td>
+            <td><%= item.resStatus %></td>
+          </tr>
+          <% }) %>
+        </table>  
+       <% }else{ %>
+        <p>No reservations yet</p>
+        <% } %>
+      </div>
+    </div>  
+
+      <div class="page-header"></div>
+  
+
+    <% include partial/footer %>
+  </body>
+</html>
