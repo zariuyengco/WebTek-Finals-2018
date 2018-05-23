@@ -31,7 +31,7 @@
 
         <% if(payments.length != 0) { %>
           <table class="table table-hover">
-            <tr>
+            <tr class="thead-light">
               <th>Payment ID</th>
               <th>Customer Name</th>
               <th>Service Provider Name</th>
@@ -43,7 +43,7 @@
               <th></th>
             </tr>
             <% payments.forEach(function(item){ %>
-            <tr>
+            <tr class="table-info">
               <td><%= item.payID %></td>
               <td><%= item.customerName %></td>
               <td><%= item.providerName %></td>
@@ -54,7 +54,7 @@
               <td><%= item.payStatus %></td>
               <td>
                 <% if(item.payStatus != 'Fully Paid') { %>
-                  <a href="/add-payment?custID=<%= item.custID %>" class="btn btn-secondary">Add Payment</a>
+                  <a href="/add-payment?resID=<%= item.resID %>&resStatus=<%= item.resStatus %>" class="btn btn-secondary">Add Payment</a>
                 <% } %>
               </td>
             </tr>

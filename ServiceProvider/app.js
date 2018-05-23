@@ -309,8 +309,8 @@ app.get("/create-services", function(req, res){
 
 app.post('/createService', function(req, res){
 	if (req.session.username){
-		var carColumns = ['carID', 'brandCar', 'typeCar', 'yearCar', 'numSeat', 'modelCar', 'mileage', 'transmission', 'rate'];
-		var carValues = [res.insertID, req.body.brand, req.body.type, req.body.year, req.body.num, req.body.model, req.body.mileage, req.body.transmission, req.body.rate];
+		var carColumns = ['brandCar', 'typeCar', 'yearCar', 'numSeat', 'modelCar', 'mileage', 'transmission', 'rate', 'carQuantity'];
+		var carValues = [req.body.brand, req.body.type, req.body.year, req.body.num, req.body.model, req.body.mileage, req.body.transmission, req.body.rate, req.body.quantity];
 		connection.query('INSERT INTO car (??) VALUES (?)', [carColumns, carValues], function(err, results){
 			if (err) { console.error(err); return}
 
@@ -525,13 +525,7 @@ app.post('/deny', function(req, res){
 	connection.query("UPDATE reservation SET resStatus = 'Denied' WHERE resID = '" + req.body.resID + "'", function(err, rows){
 		if (err) {console.log(err); return}
 
-		var transColumn = ['resID', 'resStatus'];
-		var transValues = [req.body.resID, 'Denied'];
-		connection.query("INSERT INTO reservation (??) VALUES (?)", [transColumn, transValues], function(err, rows){
-			if (err) {console.log(err); return}
-
-			res.redirect('/transaction'); 
-		});
+		res.redirect('/show-reservation'); 
 	});
 });
 
@@ -539,13 +533,7 @@ app.post('/done', function(req, res){
 	connection.query("UPDATE reservation SET resStatus = 'Done' WHERE resID = '" + req.body.resID + "'", function(err, rows){
 		if (err) {console.log(err); return}
 
-		var transColumn = ['resID', 'transStatus'];
-		var transValues = [req.body.resID, 'Done'];
-		connection.query("INSERT INTO transaction (??) VALUES (?)", [transColumn, transValues], function(err, rows){
-			if (err) {console.log(err); return}
-
-			res.redirect('/transaction'); 
-		});
+		res.redirect('/add-payment'); 
 	});
 });
 
@@ -553,12 +541,12 @@ app.post('/done', function(req, res){
 app.get('/payment', function(req, res){
 	if (req.session.username){		
 		var payments = [];
-		connection.query('SELECT reservation.custID, payID, payDate, transStatus, totalAmount, paidAmount, miscFee, CONCAT(customer.firstName, " ", customer.lastName) AS customerName, CONCAT(service_provider.firstName, " ", service_provider.lastName) AS providerName FROM paymentdetails JOIN transaction ON paymentdetails.transID = transaction.transID JOIN reservation ON transaction.resID = reservation.resID JOIN customer ON reservation.custID = customer.custID JOIN service_provider ON reservation.spID = service_provider.spID', function(err, rows1){
+		connection.query('SELECT reservation.resID, resStatus, payID, payDate, transStatus, totalAmount, paidAmount, miscFee, CONCAT(customer.firstName, " ", customer.lastName) AS customerName, CONCAT(service_provider.firstName, " ", service_provider.lastName) AS providerName FROM paymentdetails JOIN transaction ON paymentdetails.transID = transaction.transID JOIN reservation ON transaction.resID = reservation.resID JOIN customer ON reservation.custID = customer.custID JOIN service_provider ON reservation.spID = service_provider.spID', function(err, rows1){
 			if (err) {console.log(err); return}
 
 			rows1.forEach(function(item){
 				payments.push({
-					custID: item.custID,
+					resID: item.resID,
 					payID: item.payID,
 					payDate: item.payDate,
 					totalAmount: item.totalAmount,
@@ -566,7 +554,8 @@ app.get('/payment', function(req, res){
 					miscFee: item.miscFee,
 					customerName: item.customerName,
 					providerName: item.providerName,
-					payStatus: item.transStatus
+					payStatus: item.transStatus,
+					resStatus: item.resStatus
 				});
 			});
 
@@ -581,7 +570,7 @@ app.get('/payment', function(req, res){
 app.get('/add-payment', function(req, res){
 	if (req.session.username){
 		var user = req.session.username;
-
+		console.log(req.query);
 		connection.query('SELECT username, userID, CONCAT(firstName, " ", lastName) AS providerName FROM users JOIN service_provider ON spID = userID', function(err, row1){
 			if (err) {console.log(err); return}
 
@@ -594,11 +583,12 @@ app.get('/add-payment', function(req, res){
 					}
 				}
 			});
-			connection.query("SELECT transaction.transID, CONCAT(firstName, ' ', lastName) as customerName, rate, reservation.resID, paymentdetails.payID, DAY(startDate) as startDate, DAY(endDate) as endDate FROM customer JOIN reservation ON reservation.custID = customer.custID JOIN car ON reservation.carID = car.carID JOIN transaction ON transaction.resID = reservation.resID JOIN paymentdetails ON transaction.transID = paymentdetails.transID WHERE reservation.custID ='" + req.query.custID + "'", function(err, row2){
+			console.log('eyoow===========');
+			console.log(req.query.resID);
+			connection.query("SELECT transaction.transID, CONCAT(firstName, ' ', lastName) as customerName, rate, reservation.resID, paymentdetails.payID, DAY(startDate) as startDate, DAY(endDate) as endDate FROM customer JOIN reservation ON reservation.custID = customer.custID JOIN car ON reservation.carID = car.carID JOIN transaction ON transaction.resID = reservation.resID JOIN paymentdetails ON transaction.transID = paymentdetails.transID WHERE reservation.resID ='" + req.query.resID + "'", function(err, row2){
 				if (err) {console.log(err); return}
 
 				var thingy = {};
-
 				row2.forEach(function(item){
 					console.log(item.rate)
 					console.log(item.startDate)
@@ -617,8 +607,9 @@ app.get('/add-payment', function(req, res){
 						resID: item.resID,
 						payID: item.payID,
 						payStatus: item.payStatus,
+						resStatus: req.query.resStatus
 					}
-				});	
+				});
 				
 				res.render('add-payment', {name: name, thingy: thingy});
 			});
@@ -696,11 +687,18 @@ app.post('/add-payment', function(req, res){
 	connection.query('UPDATE paymentdetails SET totalAmount = ?, paidAmount = ?, miscFee = ? WHERE transID = ?', payValues, function(err, results){
 		if (err) {console.log(err); return}
 		
-		if(total == req.body.paidAmount){
+		if(req.body.resStatus == "Ongoing" && total == req.body.paidAmount){
 			connection.query('UPDATE transaction SET transStatus = ? WHERE transID = ?', ["Fully Paid", req.body.transID], function(err, results2){
 				if (err) {console.log(err); return}
-				res.redirect('/payment');
+
+				connection.query('UPDATE reservation SET resStatus = ? WHERE resID = ?', ["Done", req.body.resID], function(err, results2){
+					if (err) {console.log(err); return}
+				
+					res.redirect('/payment');
+				})
 			})
+		}else{
+			res.redirect('/payment');
 		}
 	});
 });

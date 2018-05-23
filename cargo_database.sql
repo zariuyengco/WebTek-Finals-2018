@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 22, 2018 at 06:08 PM
+-- Generation Time: May 23, 2018 at 02:43 AM
 -- Server version: 5.7.21
 -- PHP Version: 5.6.35
 
@@ -61,12 +61,12 @@ CREATE TABLE IF NOT EXISTS `car` (
   `mileage` double NOT NULL,
   `transmission` enum('Manual','Automatic','') CHARACTER SET utf8 NOT NULL,
   `rate` int(10) NOT NULL,
-  `carStatus` enum('Available','Rented','Under Repair') NOT NULL,
-  `statusQuantity` int(2) NOT NULL,
+  `carStatus` enum('Available','Rented','Under Repair') NOT NULL DEFAULT 'Available',
+  `statusQuantity` int(2) NOT NULL DEFAULT '1',
   `carStamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `carQuantity` int(2) NOT NULL,
   PRIMARY KEY (`carID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1254 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1256 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `car`
@@ -84,7 +84,9 @@ INSERT INTO `car` (`carID`, `brandCar`, `typeCar`, `yearCar`, `numSeat`, `modelC
 (1250, 'Mitsubishi', 'SUV', 2015, 7, 'model10', 3100, 'Automatic', 2500, 'Available', 1, '2018-05-15 04:51:42', 1),
 (1251, 'Honda', 'SUV', 2015, 7, 'model11', 5000, 'Automatic', 2000, 'Under Repair', 1, '2018-05-15 09:22:59', 2),
 (1252, 'Nissan', 'Sedan', 2015, 5, 'Sentra', 15000, 'Manual', 1399, 'Available', 1, '2018-05-17 09:40:05', 1),
-(1253, 'Mazda', 'Hatchback', 2013, 5, 'Mazda 2', 20000, 'Automatic', 1000, 'Available', 2, '2018-05-17 09:42:34', 2);
+(1253, 'Mazda', 'Hatchback', 2013, 5, 'Mazda 2', 20000, 'Automatic', 1000, 'Available', 2, '2018-05-17 09:42:34', 2),
+(1254, 'Toyota', 'Sedan', 2012, 5, 'asda', 20000, 'Automatic', 2000, 'Rented', 0, '2018-05-22 18:33:12', 1),
+(1255, 'Hyundai', 'Van', 2015, 9, 'sdasd', 13000, 'Automatic', 2000, 'Rented', 0, '2018-05-23 02:40:19', 1);
 
 -- --------------------------------------------------------
 
@@ -136,16 +138,14 @@ CREATE TABLE IF NOT EXISTS `paymentdetails` (
   `miscFee` int(15) DEFAULT NULL,
   PRIMARY KEY (`payID`),
   UNIQUE KEY `transID` (`transID`)
-) ENGINE=InnoDB AUTO_INCREMENT=301025 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=301030 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `paymentdetails`
 --
 
 INSERT INTO `paymentdetails` (`payID`, `transID`, `payDate`, `totalAmount`, `paidAmount`, `miscFee`) VALUES
-(301022, 203060, '2018-05-17 11:19:26', 28000, 28000, 0),
-(301023, 203062, '2018-05-22 16:39:24', 4500, 4600, 100),
-(301024, 203063, '2018-05-22 16:44:30', 35000, 28000, 0);
+(301029, 203069, '2018-05-23 02:38:50', 12000, 13000, 1000);
 
 -- --------------------------------------------------------
 
@@ -175,10 +175,10 @@ CREATE TABLE IF NOT EXISTS `reservation` (
 --
 
 INSERT INTO `reservation` (`resID`, `custID`, `spID`, `carID`, `resStatus`, `startDate`, `endDate`, `purpose`, `reservedDate`) VALUES
-(102010, 216305, 215105, 1230, 'Ongoing', '2018-05-13 09:00:00', '2018-05-16 08:00:00', 'Vacation', '2018-05-10 03:00:00'),
-(102020, 216405, 215205, 1239, 'Denied', '2018-05-20 14:00:00', '2018-05-26 11:00:00', 'Business', '2018-05-15 17:00:00'),
-(102030, 216605, 215105, 1232, 'Ongoing', '2018-05-16 11:00:00', '2018-05-24 14:00:00', 'Vacation', '2018-05-12 10:24:18'),
-(102040, 216505, 215305, 1232, 'Ongoing', '2018-06-01 12:00:00', '2018-06-11 16:00:00', 'Everyday Use', '2018-05-29 00:00:00'),
+(102010, 216305, 215105, 1230, 'Denied', '2018-05-13 09:00:00', '2018-05-16 08:00:00', 'Vacation', '2018-05-10 03:00:00'),
+(102020, 216405, 215205, 1239, 'Done', '2018-05-20 14:00:00', '2018-05-26 11:00:00', 'Business', '2018-05-15 17:00:00'),
+(102030, 216605, 215105, 1232, 'Pending', '2018-05-16 11:00:00', '2018-05-24 14:00:00', 'Vacation', '2018-05-12 10:24:18'),
+(102040, 216505, 215305, 1232, 'Pending', '2018-06-01 12:00:00', '2018-06-11 16:00:00', 'Everyday Use', '2018-05-29 00:00:00'),
 (102050, 215303, 215305, 1239, 'Pending', '2018-05-30 12:00:00', '2018-05-31 15:00:00', 'Business', '2018-05-15 09:20:26');
 
 -- --------------------------------------------------------
@@ -204,7 +204,7 @@ CREATE TABLE IF NOT EXISTS `service_provider` (
 --
 
 INSERT INTO `service_provider` (`spID`, `firstName`, `lastName`, `email`, `contactNo`) VALUES
-(215105, 'Kyla', 'Alunday', 'Kylala@gmail.com', '09854678132'),
+(215105, 'Kyla', 'Cardenas', 'Kylala@gmail.com', '09854678132'),
 (215205, 'Julie', 'Cruz', 'Julii@gmail.com', '09765445678'),
 (215305, 'Riechel', 'Fabrigas', 'achel.gel@gmail.com', '09295200241'),
 (216611, 'wyatts', 'Cardenas', 'kyla.kate@gmail.com', '01923123013'),
@@ -225,16 +225,14 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   `transStatus` enum('Partially Paid','Fully Paid') NOT NULL,
   PRIMARY KEY (`transID`),
   UNIQUE KEY `resID` (`resID`)
-) ENGINE=InnoDB AUTO_INCREMENT=203064 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=203070 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `transaction`
 --
 
 INSERT INTO `transaction` (`transID`, `resID`, `timeStamp`, `transStatus`) VALUES
-(203060, 102030, '2018-05-17 11:19:26', 'Fully Paid'),
-(203062, 102010, '2018-05-22 16:39:24', 'Fully Paid'),
-(203063, 102040, '2018-05-22 16:44:30', 'Partially Paid');
+(203069, 102020, '2018-05-23 02:38:50', 'Fully Paid');
 
 -- --------------------------------------------------------
 
@@ -292,7 +290,7 @@ ALTER TABLE `customer`
 -- Constraints for table `paymentdetails`
 --
 ALTER TABLE `paymentdetails`
-  ADD CONSTRAINT `paymentdetails_ibfk_1` FOREIGN KEY (`transID`) REFERENCES `transaction` (`transID`);
+  ADD CONSTRAINT `paymentdetails_ibfk_1` FOREIGN KEY (`transID`) REFERENCES `transaction` (`transID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `reservation`
