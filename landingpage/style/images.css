@@ -1,0 +1,45 @@
+* {
+	text-align: center;
+}
+
+body {
+	background-image: url("../images/41.jpg");
+}
+
+#home { 
+    background-repeat: no-repeat;	
+    background-attachment: relative; 
+    background-size: 1350px 580px;
+    height: 580px;
+    color:gray;
+    padding-top: 60px;
+}
+
+br {
+	line-height: 250px;
+}
+
+#about{
+	padding-top:100px;
+	color:white;
+	font-size:25px;
+}
+#abttxt{
+	margin:30px;
+	color: white;
+	text-align: center;
+	font-size: 20px;
+	font-style: oblique;
+}
+
+.btn {
+	color: white;
+}
+
+
+/*
+.position-relative {
+	background-color: rgba(0,0,0,0.1);
+}
+
+*/
