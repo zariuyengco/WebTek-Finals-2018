@@ -31,19 +31,64 @@
 
           <% if(serviceCars.length != 0) {%>
           <h1>Car Rentals Offered</h1>
+
+           <div class="row">
+              <div class="col-md-3 ">
+                <form class="form-inline" action="/sort-car" method="post">
+                  <div class="form-group">
+                    <label>Sort by:</label><br>
+                    <select class="form-control" name="column">
+                        <option hidden>Column</option>
+                        <option value="brandCar">Make</option>
+                        <option value="typeCar">Type</option>
+                        <option value="modelCar">Model</option>
+                        <option value="mileage">Mileage</option>
+                        <option value="rate">Rate</option>
+                        <option value="numSeat">Number of Seats</option>
+                        <option value="yearCar">Year Model</option>
+                        <option value="plateNo">Plate Number</option>
+                        <option value="transmission">Transmission</option>
+                    </select>
+                    <br>
+                    <select class="form-control" name="order">
+                        <option hidden>Order</option>
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+                    <input type="submit" value="Sort" class="btn">
+                  </div>
+                </form>
+              </div>
+          </div><br>
+
+          <div class="row">
+             <div class="col-md-5 ">
+                <form class="form-inline" action="/search-car" method="post">         
+                    <select class="form-control" name="status">
+                        <option hidden>Choose Status...</option>
+                        <option value="Available">Available</option>
+                        <option value="Unavailable">Unavailable</option>
+                    </select>
+                    <input type="submit" value="Search" class="btn">
+                </form>
+              </div>
+          </div>
+
+          <br>
           <table class="table table-hover">
             <tr class="thead-light">
-              <th>Car Brand</th>
+              <th>Car Make</th>
               <th>Car Type</th>
               <th>Car Model</th>
               <th>Number of Seats</th>
               <th>Transmission</th>
               <th>Mileage</th>
-              <th>Year of Car</th>
+              <th>Year Model</th>
               <th>Car Quantity</th>
               <th>Rate per Day</th>
-              <th>Car Status</th>
               <th>Status Quantity</th>
+              <th>Car Plate Number</th>
+              <th>Car Status</th>
               <th><a class="btn btn-secondary
                 " href="/create-services">ADD</a></th>
             </tr>
@@ -58,8 +103,24 @@
               <td><%= item.yearCar %></td>
               <td><%= item.carQuantity %></td>
               <td><%= item.rate %></td>
-              <td><%= item.carStatus %></td>
               <td><%= item.statusQuantity %></td>
+              <th><%= item.plateNo %></th>
+              <td>
+                <% if(item.carStatus == 'Available'){ %>
+                        <form class="form-inline" action="/unavailable" method="post">
+                            <div class="form-group">
+                                <input hidden name="carID" type="text" value="<%= item.carID %>">
+                            </div>
+                        <input class="btn btn-success" type="submit" value="Available">
+                        </form>
+                <% }else{ %>
+                        <form class="form-inline" action="/available" method="post"><div class="form-group">
+                            <input hidden name="carID" type="text" value="<%= item.carID %>">
+                            </div>
+                            <input class="btn btn-danger" type="submit" value="Unavailable">
+                        </form>
+                <% } %>
+              </td>
               <td><a class="btn btn-secondary" href="/edit?carID=<%= item.carID %>">Edit</a></td>
             </tr>
             <% }) %>

@@ -30,7 +30,7 @@
                 <form class="form-inline" action="/search-transaction-status" method="post">
                   <div class="form-group">
                     <select class="form-control" name="status">
-                        <option value="">Choose Status</option>
+                        <option hidden>Choose Status</option>
                         <option value="fully paid">Fully Paid</option>
                         <option value="partially paid">Partially Paid</option>
                     </select>
@@ -45,7 +45,7 @@
             <tr class="thead-light">
               <th>Transaction Number</th>
               <th>Customer Name</th>
-              <th>Service Provider Name</th>
+              <th>Customer Contact Number</th>
               <th>Date Started</th>
               <th>Proposed End Date</th>
               <th>Transaction Status</th>
@@ -54,7 +54,7 @@
             <tr class="table-info">
               <td><%= item.transID %></td>
               <td><%= item.customerName %></td>
-              <td><%= item.providerName %></td>
+              <td><%= item.contactNo %></td>
               <td><%= item.startDate %></td>
               <td><%= item.endDate %></td>
               <td><%= item.transStatus %></td>

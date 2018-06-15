@@ -39,6 +39,17 @@
         <input value="<%= userObject.password %>" type="password" class="form-control" placeholder="Password" required name="password">
       
         <input type="password" id="inputPassword" class="form-control" placeholder="Retype Password" required name="retype">
+
+        <label for="question">Secret Question</label>
+        <select class="custom-select d-block w-100" required name="question">
+          <option hidden>Choose...</option>
+          <option>What is your favorite color?</option>
+          <option>What is the name of your pet?</option>
+          <option>What is your favorite book?</option>
+          <option>What is your wifi password?</option>
+          <option>What is your childhood payment?</option>
+        </select><br>
+        <input type="text" class="form-control" placeholder="Answer" required name="answer">
         <% if(userObject.passwordError != ""){ %>        
           <p><%= userObject.passwordError %></p>
         <% } %>
@@ -60,6 +71,18 @@
         <input type="password" class="form-control" placeholder="Password" required name="password">
       
         <input type="password" id="inputPassword" class="form-control" placeholder="Retype Password" required name="retype">
+
+        <label for="question">Secret Question</label>
+        <select class="custom-select d-block w-100" required name="question">
+          <option>Choose...</option>
+          <option>What is your favorite color?</option>
+          <option>What is the name of your pet?</option>
+          <option>What is your favorite book?</option>
+          <option>What is your wifi password?</option>
+          <option>What is your childhood payment?</option>
+        </select><br>
+
+        <input type="text" class="form-control" placeholder="Answer" required name="answer">
       <br>
        <input type="text" name="userType" value="Service Provider" hidden>
       <% } %>

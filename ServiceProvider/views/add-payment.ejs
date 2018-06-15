@@ -21,10 +21,14 @@
 		<input class="form-control" type="" name="service" value="<%= name.providerName %>" disabled><br>
 		<label for="Cname">Customer Name:</label>
 		<input class="form-control" type="text" name="" placeholder="First Name" required value="<%= thingy.customerName %>" disabled><br>
+		<label for="Cname">Tentative Paid Amount:</label>
+		<input class="form-control" type="text" name="" placeholder="First Name" required value="<%= thingy.tentativePaid %>" disabled><br>
 		<label for="firstName">Total Amount: ₱<%= thingy.totalAmount %></label>
 		<input type="text" name="totalAmount" value="<%= thingy.totalAmount %>" hidden><br>
-		<label for="lastName">Paid Amount:</label>
-		<input class="form-control" type="text" name="paidAmount" placeholder="Paid Amount" required><br>
+		<label for="Cname">Balance: ₱<%= thingy.balance %></label>
+		<input type="text" name="balance" value="<%= thingy.balance %>" hidden><br>
+		<label for="lastName">Final Paid Amount:</label>
+		<input class="form-control" type="text" name="paidAmount" placeholder="Final Paid Amount" required><br>
 		<label for="contactNumber">Miscellaneous Fee:</label>
 		<input class="form-control" type="text" name="miscFee" placeholder="Miscellaneous Fee" required><br>
 		<input type="text" name="userType" value="Service Provider" hidden>

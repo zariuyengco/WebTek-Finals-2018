@@ -30,7 +30,7 @@ var connection = mysql.createConnection({
 	user: 'root',
 	port: 3306,
 	password: '',
-	database: 'cargo database'
+	database: 'cargo_database'
 });
 
 connection.connect(function(err){
@@ -117,7 +117,7 @@ app.post('/edit-profile', function(req, res){
 app.get('/main', function(req, res){
 	if(req.session.username){
 
-		connection.query("SELECT * FROM car", function(err, rows2){
+		connection.query("SELECT * FROM car NATURAL JOIN service_provider WHERE spID = ?", req.session.userID, function(err, rows2){
 			if(err){console.log(err); return}
 
 			var serviceCars = [];
@@ -134,7 +134,8 @@ app.get('/main', function(req, res){
 					rate: item.rate,
 					carStatus: item.carStatus,
 					carQuantity: item.carQuantity,
-					statusQuantity: item.statusQuantity		
+					statusQuantity: item.statusQuantity,
+					plateNo: item.plateNo	
 				});
 			});
 			res.render('main', {serviceCars: serviceCars});
@@ -142,6 +143,22 @@ app.get('/main', function(req, res){
 	}else {
 		res.redirect('/login');
 	}
+});
+
+app.post('/unavailable', function(req, res){
+	connection.query("UPDATE car SET carStatus = 'Unavailable' WHERE carID = '" + req.body.carID + "'", function(err, row){
+		if (err) {console.log(err); return}
+
+		res.redirect('/main');
+	});
+});
+
+app.post('/available', function(req, res){
+	connection.query("UPDATE car SET carStatus = 'Available' WHERE carID = '" + req.body.carID + "'", function(err, row){
+		if (err) {console.log(err); return}
+
+		res.redirect('/main');
+	});
 });
 
 
@@ -153,7 +170,7 @@ app.get('/login', function(req, res){
 app.get('/logout', function(req, res){
 	req.session.destroy(function(err){
 		if(err){console.error(err); return}
-	res.redirect('/');
+		res.redirect('/');
 	});
 });
 
@@ -166,7 +183,7 @@ app.get('/error', function(req, res){
 app.post('/login', function(req, res){
 	var username = req.body.username;
 	
-	connection.query("SELECT username, userType FROM users WHERE status = 'Activate'", function(err, rows){
+	connection.query("SELECT username, userType FROM users WHERE status = 'Activated'", function(err, rows){
 		if (err) {console.log(err); return}
 
 		var valid = false;
@@ -176,10 +193,10 @@ app.post('/login', function(req, res){
 				valid = true;
 				var userType = item.userType;
 
-				if(userType == "Customer"){
-					res.redirect('http://customer.cargo.com/login.jsp?username=' + req.body.username);
-				}else if (userType == 'Administrator'){
-					res.redirect('http://admin.cargo.com/login.php?username=' + req.body.username);
+				if(userType == "Administrator"){
+					res.redirect('http://admin.cargo2018.com/loginAdmin.php?username=' + req.body.username);
+				}else if (userType == "SuperAdmin"){
+					res.redirect('http://admin.cargo2018.com/login.php?username=' + req.body.username);
 				}else{
 					res.redirect('/password?username=' + req.body.username);
 				}
@@ -192,17 +209,21 @@ app.post('/login', function(req, res){
 	});
 });
 
-var uName = null;
+//var uName = null;
 app.get('/password', function(req, res){
-	uName = req.query.username;
-	res.render('password');
+	var uName = req.query.username;
+	console.log(uName);
+	var user = {
+		username: uName
+	}
+	res.render('password', {user: user});
 });
 
 app.post('/password', function(req, res){
 	var password = req.body.password;
-	var username = uName;
+	var username = req.body.username;
 
-	connection.query("SELECT username, password FROM users WHERE status = 'Activate'", function(err, rows){
+	connection.query("SELECT userID, username, password FROM users WHERE status = 'Activated'", function(err, rows){
 		if (err) {console.log(err); return}
 
 		var valid = false;
@@ -212,6 +233,7 @@ app.post('/password', function(req, res){
 				valid = true;
 
 				req.session.username = username;
+                req.session.userID = item.userID;
 				res.redirect('/main');
 			}
 		});
@@ -224,18 +246,68 @@ app.post('/password', function(req, res){
 
 
 app.get('/forgot-password', function(req, res){
-	uName = req.query.username;
-	res.render('forgot-password');
-});
+	req.session.username = req.query.username;
+	var username = req.session.username;
 
-app.post('/forgot-password', function(req, res){
-	var username = uName;
-
-	connection.query("UPDATE users SET password ='" + req.body.retype + "' WHERE username = '" + username + "'", function(err, row){
+	connection.query("SELECT question, answer, password FROM users WHERE username=?", username, function(err, row){
 		if (err) {console.log(err); return}
 
-		res.redirect('/main');
+		var forgot = {};
+		row.forEach(function(item){
+			forgot = {
+				question: item.question,
+				answer: item.answer,
+				password: item.password
+			}
+		});
+		res.render('forgot-password', {forgot: forgot});
 	});
+});
+
+
+app.post('/forgot-password', function(req, res){
+	var username = req.session.username;
+
+	connection.query("SELECT question, answer, password FROM users WHERE username=?", username, function(err, row){
+		if (err) {console.log(err); return}
+
+		var forgot = {};
+		row.forEach(function(item){
+			forgot = {
+				question: item.question,
+				answer: item.answer,
+				password: item.password
+			}
+			console.log(item.answer+"=============");
+		});
+		//console.log(forgot.answer);
+
+		if (forgot.answer == req.body.answer){
+			res.redirect('/new-password');
+		}else {
+			res.redirect('/login');
+		}	
+	});
+});
+
+app.get('/new-password', function(req, res){
+	res.render('new-password');
+});
+
+app.post('/new-password', function(req, res){
+
+	if(req.body.password != req.body.retype){
+		res.redirect('/new-password');
+	}else {
+		connection.query('UPDATE users SET password =? WHERE username=?', [req.body.password, req.session.username], function(err, row){
+			if (err) {console.log(err); return}
+
+			req.session.destroy(function(err){
+				if(err){console.error(err); return}
+				res.redirect('/login');
+			});
+		});
+	}
 });
 
 
@@ -244,8 +316,8 @@ app.get('/register', function(req, res){
 });
 
 app.post('/register', function(req, res){
-	var userColumns = ['username', 'password', 'userType', 'status'];
-	var userValues = [req.body.username, req.body.retype, req.body.userType, 'Activate'];
+	var userColumns = ['username', 'password', 'userType', 'status', 'question', 'answer'];
+	var userValues = [req.body.username, req.body.retype, req.body.userType, 'Deactivated', req.body.question, req.body.answer];
 	var userObject = {
 		username: req.body.username,
 		password: req.body.password,
@@ -253,6 +325,8 @@ app.post('/register', function(req, res){
 		lastName: req.body.lastname,
 		contactNumber: req.body.contact,
 		email: req.body.email,
+		question: req.body.question,
+		answer: req.body.answer,
 		passwordError: "",
 		usernameError: ""
 	}
@@ -309,8 +383,8 @@ app.get("/create-services", function(req, res){
 
 app.post('/createService', function(req, res){
 	if (req.session.username){
-		var carColumns = ['brandCar', 'typeCar', 'yearCar', 'numSeat', 'modelCar', 'mileage', 'transmission', 'rate', 'carQuantity'];
-		var carValues = [req.body.brand, req.body.type, req.body.year, req.body.num, req.body.model, req.body.mileage, req.body.transmission, req.body.rate, req.body.quantity];
+		var carColumns = ['brandCar', 'typeCar', 'yearCar', 'numSeat', 'modelCar', 'mileage', 'transmission', 'rate', 'carQuantity', 'spID', 'plateNo'];
+		var carValues = [req.body.brand, req.body.type, req.body.year, req.body.num, req.body.model, req.body.mileage, req.body.transmission, req.body.rate, req.body.quantity, req.session.userID, req.body.number];
 		connection.query('INSERT INTO car (??) VALUES (?)', [carColumns, carValues], function(err, results){
 			if (err) { console.error(err); return}
 
@@ -351,11 +425,12 @@ app.get('/createRental-success', function(req, res){
 
 app.get("/show-reservation", function(req, res){
 	if (req.session.username){
+		console.log(req.session.spID);
 		var pendingReservations = [];
 		var acceptedReservations = [];
 		var reservations = [];
 
-		connection.query('SELECT customer.custID, resID, contactNo, reservedDate, resStatus, CONCAT(firstName, " ", lastName) AS customerName, address FROM reservation JOIN customer ON reservation.custID = customer.custID WHERE resStatus ="Accepted"',function (err, rows1){
+		connection.query('SELECT car.spID, customer.custID, resID, contactNo, reservedDate, resStatus, CONCAT(firstName, " ", lastName) AS customerName, address FROM reservation JOIN customer ON reservation.custID = customer.custID NATURAL JOIN car WHERE resStatus ="Accepted" AND spID="?"', req.session.userID ,function (err, rows1){
 			if(err) {console.log(err); return}
 
 			rows1.forEach(function(item){
@@ -370,7 +445,7 @@ app.get("/show-reservation", function(req, res){
 				});
 			});
 
-			connection.query('SELECT reservation.custID as custID, resID, service_provider.contactNo AS "spContactNo", customer.contactNo AS "cContact", purpose, CONCAT(service_provider.firstName, " ", service_provider.lastName) as serviceName, CONCAT(customer.firstName, " ", customer.lastName) as customerName, brandCar, typeCar, modelCar, mileage, rate FROM reservation JOIN service_provider ON reservation.spID = service_provider.spID JOIN car ON reservation.carID = car.carID JOIN customer ON reservation.custID = customer.custID WHERE resStatus = "Pending"', function(err, rows2){
+			connection.query('SELECT reservation.custID as custID, resID, service_provider.contactNo AS "spContactNo", customer.contactNo AS "cContact", purpose, CONCAT(service_provider.firstName, " ", service_provider.lastName) as serviceName, CONCAT(customer.firstName, " ", customer.lastName) as customerName, brandCar, typeCar, modelCar, mileage, rate FROM reservation JOIN car ON reservation.carID = car.carID JOIN customer ON reservation.custID = customer.custID JOIN service_provider ON car.spID = service_provider.spID WHERE resStatus = "Pending" AND car.spID = "?"', req.session.userID, function(err, rows2){
 				if(err) {console.error(err); return}
 
 				rows2.forEach(function(item){
@@ -389,7 +464,7 @@ app.get("/show-reservation", function(req, res){
 						purpose: item.purpose
 					});
 				});
-				connection.query("SELECT resID, contactNo, startDate, endDate, reservedDate, resStatus, CONCAT(firstName, ' ', lastName) AS customerName, address, brandCar, typeCar, modelCar FROM reservation JOIN customer ON reservation.custID = customer.custID JOIN car ON reservation.carID = car.carID", function(err, rows3){
+				connection.query("SELECT resID, contactNo, startDate, endDate, reservedDate, resStatus, CONCAT(firstName, ' ', lastName) AS customerName, address, brandCar, typeCar, modelCar FROM reservation JOIN customer ON reservation.custID = customer.custID JOIN car ON reservation.carID = car.carID WHERE spID = '?'", req.session.userID, function(err, rows3){
 					if (err) {console.log(err); return}
 
 					rows3.forEach(function(item){
@@ -452,8 +527,8 @@ app.get('/edit', function(req, res){
 });
 
 app.post('/editService', function(req, res){
-	var update = "UPDATE car SET brandCar=?, typeCar=?, modelCar=?, transmission=?, numSeat=?, yearCar=?, mileage=?, rate=?, carStatus=?, carQuantity=?, statusQuantity=? WHERE carID = ?";
-	var updateValues = [req.body.brand, req.body.type, req.body.model, req.body.transmission, req.body.num, req.body.year, req.body.mileage, req.body.rate, req.body.status, req.body.quantity, req.body.stats, req.body.carID];
+	var update = "UPDATE car SET brandCar=?, typeCar=?, modelCar=?, transmission=?, numSeat=?, yearCar=?, mileage=?, rate=?, carQuantity=?, statusQuantity=? WHERE carID = ?";
+	var updateValues = [req.body.brand, req.body.type, req.body.model, req.body.transmission, req.body.num, req.body.year, req.body.mileage, req.body.rate, req.body.quantity, req.body.stats, req.body.carID];
 
 	connection.query(update, updateValues, function(err, rows){
 		if (err) {console.log(err); return}
@@ -492,15 +567,15 @@ app.get('/edit-success', function(req, res){
 app.get('/transaction', function(req, res){
 	if(req.session.username){
 		var transactions = [];
-		connection.query("SELECT transID, CONCAT(customer.firstName, ' ', customer.lastName) AS 'customerName', CONCAT(service_provider.firstName, ' ', service_provider.lastName) AS 'providerName', startDate, endDate, transStatus FROM transaction JOIN reservation ON transaction.resID = reservation.resID JOIN customer USING(custID) JOIN service_provider USING(spID)", function(err, rows){
+		connection.query("SELECT transID, contactNo, CONCAT(customer.firstName, ' ', customer.lastName) AS 'customerName', startDate, endDate, transStatus FROM transaction JOIN reservation ON transaction.resID = reservation.resID JOIN customer USING(custID) JOIN car USING(carID) WHERE spID='?'", req.session.userID, function(err, rows){
 			if (err) {console.log(err); return;}
 
 			rows.forEach(function(item){
 				transactions.push({
 					transID: item.transID,
 					customerName: item.customerName,
-					providerName: item.providerName,
 					startDate: item.startDate,
+					contactNo: item.contactNo,
 					endDate: item.endDate,
 					transStatus: item.transStatus
 				});
@@ -541,19 +616,22 @@ app.post('/done', function(req, res){
 app.get('/payment', function(req, res){
 	if (req.session.username){		
 		var payments = [];
-		connection.query('SELECT reservation.resID, resStatus, payID, payDate, transStatus, totalAmount, paidAmount, miscFee, CONCAT(customer.firstName, " ", customer.lastName) AS customerName, CONCAT(service_provider.firstName, " ", service_provider.lastName) AS providerName FROM paymentdetails JOIN transaction ON paymentdetails.transID = transaction.transID JOIN reservation ON transaction.resID = reservation.resID JOIN customer ON reservation.custID = customer.custID JOIN service_provider ON reservation.spID = service_provider.spID', function(err, rows1){
+		connection.query('SELECT reservation.resID, resStatus, payID, payDate, transStatus, tentativePaid, totalAmount, paidAmount, miscFee, contactNo, CONCAT(customer.firstName, " ", customer.lastName) AS customerName FROM paymentdetails JOIN transaction ON paymentdetails.transID = transaction.transID JOIN reservation ON transaction.resID = reservation.resID JOIN customer ON reservation.custID = customer.custID JOIN car ON reservation.carID = car.carID', function(err, rows1){
 			if (err) {console.log(err); return}
 
 			rows1.forEach(function(item){
+				var balance = Number(item.totalAmount - item.tentativePaid);
 				payments.push({
 					resID: item.resID,
 					payID: item.payID,
 					payDate: item.payDate,
 					totalAmount: item.totalAmount,
+					tentativePaid: item.tentativePaid,
+					contactNo: item.contactNo,
 					paidAmount: item.paidAmount,
+					balance: balance,
 					miscFee: item.miscFee,
 					customerName: item.customerName,
-					providerName: item.providerName,
 					payStatus: item.transStatus,
 					resStatus: item.resStatus
 				});
@@ -585,7 +663,7 @@ app.get('/add-payment', function(req, res){
 			});
 			console.log('eyoow===========');
 			console.log(req.query.resID);
-			connection.query("SELECT transaction.transID, CONCAT(firstName, ' ', lastName) as customerName, rate, reservation.resID, paymentdetails.payID, DAY(startDate) as startDate, DAY(endDate) as endDate FROM customer JOIN reservation ON reservation.custID = customer.custID JOIN car ON reservation.carID = car.carID JOIN transaction ON transaction.resID = reservation.resID JOIN paymentdetails ON transaction.transID = paymentdetails.transID WHERE reservation.resID ='" + req.query.resID + "'", function(err, row2){
+			connection.query("SELECT transaction.transID, CONCAT(firstName, ' ', lastName) as customerName, rate, tentativePaid, reservation.resID, paymentdetails.payID, DAY(startDate) as startDate, DAY(endDate) as endDate FROM customer JOIN reservation ON reservation.custID = customer.custID JOIN car ON reservation.carID = car.carID JOIN transaction ON transaction.resID = reservation.resID JOIN paymentdetails ON transaction.transID = paymentdetails.transID WHERE reservation.resID ='" + req.query.resID + "'", function(err, row2){
 				if (err) {console.log(err); return}
 
 				var thingy = {};
@@ -597,12 +675,16 @@ app.get('/add-payment', function(req, res){
 					if ( item.startDate-item.endDate == 0){
 						totalAmount = item.rate;
 					}else {
-						totalAmount = item.rate*((item.endDate) - (item.startDate));
+						totalAmount = item.rate* Math.abs((item.endDate) - (item.startDate));
 					} 
 					console.log(totalAmount);
+					var balance = Number(totalAmount - item.tentativePaid);
+					console.log(balance);
 					thingy = {
 						transID: item.transID,
 						customerName: item.customerName,
+						tentativePaid: item.tentativePaid,
+						balance: balance,
 						totalAmount: totalAmount,
 						resID: item.resID,
 						payID: item.payID,
@@ -665,8 +747,8 @@ app.post('/payment-reservation', function(req, res){
 	connection.query("INSERT INTO transaction (??) VALUES (?)", [transColumns, transValues], function(err, results){
 		if (err) {console.log(err); return}
 
-		var payColumns = ['transID','paidAmount', 'totalAmount'];
-		var payValues = [results.insertId, req.body.paidAmount, req.body.totalAmount];
+		var payColumns = ['transID','tentativePaid', 'totalAmount'];
+		var payValues = [results.insertId, req.body.tentativePaid, req.body.totalAmount];
 		connection.query("INSERT INTO paymentdetails (??) VALUES (?)", [payColumns, payValues], function(err, results){
 			if (err) {console.log(err); return}
 
@@ -680,18 +762,20 @@ app.post('/payment-reservation', function(req, res){
 
 
 app.post('/add-payment', function(req, res){
-	var total = Number(req.body.totalAmount) + Number(req.body.miscFee);
-	var payValues = [req.body.totalAmount, req.body.paidAmount, req.body.miscFee, req.body.transID];
+	var total = Number(req.body.balance) + Number(req.body.miscFee);
+	var payValues = [req.body.totalAmount, req.body.paidAmount, req.body.miscFee, req.body.balance, req.body.transID];
 	console.log("asadsada ==============================")
 	console.log(req.body.transID)
-	connection.query('UPDATE paymentdetails SET totalAmount = ?, paidAmount = ?, miscFee = ? WHERE transID = ?', payValues, function(err, results){
+	console.log(req.body.paidAmount)
+	console.log(total)
+	connection.query('UPDATE paymentdetails SET totalAmount = ?, paidAmount = ?, miscFee = ?, balance = ? WHERE transID = ?', payValues, function(err, row1){
 		if (err) {console.log(err); return}
 		
 		if(req.body.resStatus == "Ongoing" && total == req.body.paidAmount){
-			connection.query('UPDATE transaction SET transStatus = ? WHERE transID = ?', ["Fully Paid", req.body.transID], function(err, results2){
+			connection.query('UPDATE transaction SET transStatus = ? WHERE transID = ?', ["Fully Paid", req.body.transID], function(err, row2){
 				if (err) {console.log(err); return}
-
-				connection.query('UPDATE reservation SET resStatus = ? WHERE resID = ?', ["Done", req.body.resID], function(err, results2){
+				
+				connection.query('UPDATE reservation SET resStatus = ? WHERE resID = ?', ["Done", req.body.resID], function(err, row3){
 					if (err) {console.log(err); return}
 				
 					res.redirect('/payment');
@@ -707,14 +791,14 @@ app.post('/search-transaction-status', function(req, res){
 	var status = [req.body.status];
 	var transaction = [];
 
-	connection.query(`SELECT transID, transStatus, CONCAT(customer.firstName, ' ', customer.lastName) AS 'customerName', CONCAT(service_provider.firstName, ' ', service_provider.lastName) AS 'providerName', startDate, endDate FROM transaction JOIN reservation ON transaction.resID = reservation.resID JOIN customer USING(custID) JOIN service_provider USING(spID) WHERE transStatus = ?`, status, function(err, rows1){
+	connection.query(`SELECT transID, transStatus, contactNo, CONCAT(customer.firstName, ' ', customer.lastName) AS 'customerName', startDate, endDate FROM transaction JOIN reservation ON transaction.resID = reservation.resID JOIN customer USING(custID) JOIN car USING(carID) WHERE transStatus = ?`, status, function(err, rows1){
 		if (err) {console.log(err); return}
 
 		rows1.forEach(function(item){
 			transaction.push({
 				transID: item.transID,
 				customerName: item.customerName,
-				providerName: item.providerName,
+				contactNo: item.contactNo,
 				startDate: item.startDate,
 				endDate: item.endDate,
 				transStatus: item.transStatus
@@ -752,11 +836,89 @@ app.post('/search-reservation', function(req, res){
 
 app.get('/search-reservation', function(req, res){
 	res.render('search-reservation');
-})
+});
 
+app.post('/sort-car', function(req, res){
+	var car = [req.body.car];
+	var cars = [];
 
+	if(req.body.order == "asc"){
+		var sql = "SELECT * FROM car JOIN service_provider ON service_provider.spID = car.spID WHERE car.spID = '?' ORDER BY " + connection.escapeId(req.body.column);
+		connection.query(sql, [req.session.userID], function(err, row){
+			if (err) {console.log(err); return}
 
+			console.log(sql);
+			console.log(row);
+			row.forEach(function(item){
+				cars.push({
+					brandCar: item.brandCar,
+					typeCar: item.typeCar,
+					modelCar: item.modelCar,
+					mileage: item.mileage,
+					transmission: item.transmission,
+					rate: item.rate,
+					yearCar: item.yearCar,
+					numSeat: item.numSeat,
+					plateNo: item.plateNo,
+					carStatus: item.carStatus,
+					carQuantity: item.carQuantity,
+					statusQuantity: item.statusQuantity
+				});
+			});
+			res.render('main', {serviceCars: cars});
+		});
+	}else{
+		var sql = "SELECT * FROM car JOIN service_provider ON service_provider.spID = car.spID WHERE car.spID = '?' ORDER BY " + connection.escapeId(req.body.column);
+		connection.query(sql, [req.session.userID], function(err, row){
+			if (err) {console.log(err); return}
 
+			row.forEach(function(item){
+				cars.push({
+					brandCar: item.brandCar,
+					typeCar: item.typeCar,
+					modelCar: item.modelCar,
+					mileage: item.mileage,
+					transmission: item.transmission,
+					rate: item.rate,
+					yearCar: item.yearCar,
+					numSeat: item.numSeat,
+					plateNo: item.plateNo,
+					carStatus: item.carStatus,
+					carQuantity: item.carQuantity,
+					statusQuantity: item.statusQuantity
+				});
+			});
+			res.render('main', {serviceCars: cars});
+		});
+	}
+});
+
+app.post('/search-car', function(req, res){
+	var status = [req.body.status];
+	var search = [];
+
+	connection.query("SELECT * FROM car WHERE carStatus =? AND car.spID='?'", [status, req.session.userID], function(err, row){
+		if (err) {console.log(err); return}
+
+		row.forEach(function(item){
+			search.push({
+				brandCar: item.brandCar,
+				typeCar: item.typeCar,
+				modelCar: item.modelCar,
+				mileage: item.mileage,
+				transmission: item.transmission,
+				rate: item.rate,
+				yearCar: item.yearCar,
+				numSeat: item.numSeat,
+				plateNo: item.plateNo,
+				carStatus: item.carStatus,
+				carQuantity: item.carQuantity,
+				statusQuantity: item.statusQuantity
+			});
+		});
+		res.render('main', {serviceCars: search});
+	});
+});
 
 
 

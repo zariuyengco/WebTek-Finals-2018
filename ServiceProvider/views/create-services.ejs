@@ -34,7 +34,7 @@
               <div class="col-md-3 mb-3">
               <label for="brand">Brand of Car</label>
                 <select class="custom-select d-block w-100" name="brand" required>
-                  <option>Choose...</option>
+                  <option hidden>Choose...</option>
                   <option>Toyota</option>
                   <option>Nissan</option>
                   <option>Chevrolet</option>
@@ -50,7 +50,7 @@
             <div class="col-md-3 mb-3">
               <label for="type">Type of Car</label>
                 <select class="custom-select d-block w-100" name="type" required>
-                  <option>Choose...</option>
+                  <option hidden>Choose...</option>
                   <option>Sedan</option>
                   <option>Van</option>
                   <option>Pick-Up</option>
@@ -74,7 +74,7 @@
             <div class="col-md-3 mb-3">
               <label for="trans">Transmission</label>
                 <select class="custom-select d-block w-100" name="transmission" required>
-                  <option>Choose...</option>
+                  <option hidden>Choose...</option>
                   <option>Automatic</option>
                   <option>Manual</option>
                 </select>
@@ -83,7 +83,7 @@
             <div class="col-md-2 mb-3">
               <label for="num">Number of Seats</label>
                 <select class="custom-select d-block w-100" name="num" required>
-                  <option>Choose...</option>
+                  <option hidden>Choose...</option>
                   <option>5</option>
                   <option>6</option>
                   <option>7</option>
@@ -96,7 +96,7 @@
             <div class="col-md-2 mb-3">
               <label for="year">Year of Car</label>
                 <select class="custom-select d-block w-100" name="year" required>
-                  <option>Choose...</option>
+                  <option hidden>Choose...</option>
                   <option>2010</option>
                   <option>2011</option>
                   <option>2012</option>
@@ -120,12 +120,15 @@
               <label for="rate">Rate per Day</label>
               <input type="text" name="rate" required size="15">
             </div>
-          </div>
 
-           <div class="row">
             <div class="col-md-2 mb-3">
               <label for="rate">Car Quantity</label>
               <input type="text" name="quantity" required size="15">
+            </div>
+
+            <div class="col-md-2 mb-3">
+              <label for="rate">Car Plate Number</label>
+              <input type="text" name="number" required size="15">
             </div>
           </div>
 

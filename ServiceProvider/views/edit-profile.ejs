@@ -21,9 +21,9 @@
     <form class="form-signin" action="/edit-profile" method="post">
       <h1 class="h3 mb-3 font-weight-normal" id="sign">Edit</h1>
 
-      <input type="text" class="form-control" value="<%= serviceUsers.username %>" autofocus name="username"><br>
+      <input type="text" class="form-control" value="<%= serviceUsers.username %>" name="username" disabled><br>
 
-      <input type="text" class="form-control" value="<%= serviceUsers.email %>" required name="email"><br>
+      <input type="text" class="form-control" value="<%= serviceUsers.email %>" autofocus required name="email"><br>
       
       <input type="text" class="form-control" value="<%= serviceUsers.firstName %>" required name="firstname">
       
@@ -38,7 +38,7 @@
      <input type="text" name="spID" value="<%= serviceUsers.spID %>" hidden>
 
       <input type="submit" class="btn btn-lg btn-primary btn-block" id="signup">
-      <a href="/login" class="btn">Cancel</a>
+      <a href="/profile" class="btn">Cancel</a>
       <p class="mt-5 mb-3 text-muted">&copy; CarGo 2018</p>
     </form>
   </body>

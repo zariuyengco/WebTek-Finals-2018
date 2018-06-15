@@ -22,18 +22,18 @@
 		<label for="Cname">Customer Name:</label>
 		<input class="form-control" type="text" name="" placeholder="First Name" required value="<%= customerDetails.customerName %>" disabled><br>
 
-		<label for="firstName">Tentative Total Amount: ₱<%= customerDetails.totalAmount %></label>
+		<label for="firstName">Total Amount: ₱<%= customerDetails.totalAmount %></label>
 		<input type="text" name="totalAmount" value="<%= customerDetails.totalAmount %>" hidden><br>
 
-		<label for="lastName">Paid Amount:</label>
-		<input class="form-control" type="text" name="paidAmount" placeholder="Paid Amount" required><br>
+		<label for="lastName">Tentative Paid Amount:</label>
+		<input class="form-control" type="text" name="tentativePaid" placeholder="Tentative Paid Amount" required><br>
 
 		<input type="text" name="resID" value="<%= customerDetails.resID %>" hidden>
 
 		<input type="text" name="userType" value="Service Provider" hidden>
 
 		<input type="submit" class="btn">
-		<a class="btn btn-secondary" href="/payment">Cancel</a>
+		<a class="btn btn-secondary" href="/show-reservation">Cancel</a>
 	</form>
     </div>
 
