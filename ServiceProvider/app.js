@@ -104,9 +104,9 @@ app.post('/edit-profile', function(req, res){
 	connection.query(update, [req.body.firstname, req.body.lastname, req.body.email, req.body.contact, req.body.spID], function(err, row){
 		if (err) {console.log(err); return}
 
-		var update1 = "UPDATE users SET username=?, password=? WHERE userID = ?";
+		var update1 = "UPDATE users SET password=? WHERE userID = ?";
 
-		connection.query(update1, [req.body.username, req.body.retype, req.body.spID], function(err, row1){
+		connection.query(update1, [req.body.retype, req.body.spID], function(err, row1){
 			if(err) {console.log(err); return}
 
 			res.redirect('/profile');
