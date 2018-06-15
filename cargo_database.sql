@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 24, 2018 at 11:28 PM
+-- Generation Time: Jun 15, 2018 at 03:11 PM
 -- Server version: 5.7.21
 -- PHP Version: 5.6.35
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `cargo database`
+-- Database: `cargo_database`
 --
 
 -- --------------------------------------------------------
@@ -141,18 +141,20 @@ CREATE TABLE IF NOT EXISTS `paymentdetails` (
   `transID` int(6) NOT NULL,
   `payDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `totalAmount` int(15) NOT NULL,
-  `paidAmount` int(15) NOT NULL,
+  `tentativePaid` int(15) NOT NULL,
+  `paidAmount` int(15) NOT NULL DEFAULT '0',
+  `balance` int(15) NOT NULL DEFAULT '0',
   `miscFee` int(15) DEFAULT NULL,
   PRIMARY KEY (`payID`),
   UNIQUE KEY `transID` (`transID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `paymentdetails`
 --
 
-INSERT INTO `paymentdetails` (`payID`, `transID`, `payDate`, `totalAmount`, `paidAmount`, `miscFee`) VALUES
-(1, 1, '2018-05-24 20:28:08', 22000, 10000, NULL);
+INSERT INTO `paymentdetails` (`payID`, `transID`, `payDate`, `totalAmount`, `tentativePaid`, `paidAmount`, `balance`, `miscFee`) VALUES
+(8, 10, '2018-06-15 13:51:02', 22000, 10000, 13000, 12000, 1000);
 
 -- --------------------------------------------------------
 
@@ -180,7 +182,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
 --
 
 INSERT INTO `reservation` (`resID`, `custID`, `carID`, `resStatus`, `startDate`, `endDate`, `purpose`, `reservedDate`) VALUES
-(102030, 216605, 125001, 'Ongoing', '2018-05-20T08:15:00', '2018-05-31T09:00:00', 'Vacation', '2018-05-24 20:25:27');
+(102030, 216605, 125001, 'Done', '2018-05-20T08:15:00', '2018-05-31T09:00:00', 'Vacation', '2018-05-24 20:25:27');
 
 -- --------------------------------------------------------
 
@@ -208,7 +210,7 @@ INSERT INTO `service_provider` (`spID`, `firstName`, `lastName`, `email`, `conta
 (215105, 'Kyla', 'Cardenas', 'Kylala@gmail.com', '09854678132'),
 (215205, 'Julie', 'Cruz', 'Julii@gmail.com', '09765445678'),
 (215305, 'Riechel', 'Fabrigas', 'achel.gel@gmail.com', '09295200241'),
-(216607, 'halllo', 'hiii', 'kiiayla@gmail.com', '09983481493');
+(216608, 'hii', 'hallo', 'kylaa@gmail.com', '09276584739');
 
 -- --------------------------------------------------------
 
@@ -224,14 +226,14 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   `transStatus` enum('Partially Paid','Fully Paid') NOT NULL,
   PRIMARY KEY (`transID`),
   UNIQUE KEY `resID` (`resID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `transaction`
 --
 
 INSERT INTO `transaction` (`transID`, `resID`, `timeStamp`, `transStatus`) VALUES
-(1, 102030, '2018-05-24 20:28:08', 'Partially Paid');
+(10, 102030, '2018-06-15 13:51:02', 'Fully Paid');
 
 -- --------------------------------------------------------
 
@@ -246,11 +248,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(20) CHARACTER SET utf8 NOT NULL,
   `userType` enum('Administrator','Customer','Service Provider','SuperAdmin') CHARACTER SET utf8 NOT NULL,
   `status` enum('Activated','Deactivated') NOT NULL DEFAULT 'Deactivated',
-  `question` enum('What is your favorite color?','What is the name of your pet?','What is your favorite book?','What is your wifi password','What is your childhood nickname') NOT NULL,
+  `question` enum('What is your favorite color?','What is the name of your pet?','What is your favorite book?','What is your wifi password?','What is your childhood nickname?') NOT NULL,
   `answer` varchar(200) NOT NULL,
   PRIMARY KEY (`userID`),
   UNIQUE KEY `USERNAME` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=216608 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=216609 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
@@ -261,11 +263,11 @@ INSERT INTO `users` (`userID`, `username`, `password`, `userType`, `status`, `qu
 (215205, 'Juliee', '1235JAC', 'Service Provider', 'Activated', 'What is your favorite color?', 'fushcia'),
 (215305, 'Acheline', '1236RAF', 'Service Provider', 'Activated', 'What is the name of your pet?', 'Potchi'),
 (215405, 'Mmitchie', '1237MMB', 'SuperAdmin', 'Activated', 'What is your favorite book?', 'Fifty Shades of Grae'),
-(215505, 'Graevity', '1238GS', 'Administrator', 'Activated', 'What is your wifi password', 'SaglitLang'),
-(216305, 'Shaii', '1334SMB', 'Customer', 'Activated', 'What is your childhood nickname', 'shai shai'),
+(215505, 'Graevity', '1238GS', 'Administrator', 'Activated', 'What is the name of your pet?', 'SaglitLang'),
+(216305, 'Shaii', '1334SMB', 'Customer', 'Activated', 'What is your favorite book?', 'shai shai'),
 (216505, 'Zarii', '1354ZU', 'Customer', 'Activated', 'What is your favorite color?', 'Red'),
 (216605, 'Ssean', '1364SWS', 'Customer', 'Activated', 'What is the name of your pet?', 'Rambol'),
-(216607, 'kiiayla', 'hahaha', 'Service Provider', 'Deactivated', 'What is your favorite color?', 'pink');
+(216608, 'kiiayla', 'alunday', 'Service Provider', 'Deactivated', 'What is your wifi password?', 'woowi');
 
 --
 -- Constraints for dumped tables
