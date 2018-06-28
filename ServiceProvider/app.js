@@ -196,7 +196,7 @@ app.post('/login', function(req, res){
 				if(userType == "Administrator"){
 					res.redirect('http://admin.cargo2018.com/loginAdmin.php?username=' + req.body.username);
 				}else if (userType == "SuperAdmin"){
-					res.redirect('http://admin.cargo2018.com/login.php?username=' + req.body.username);
+					res.redirect('http://superadmin.cargo2018.com/login.php?username=' + req.body.username);
 				}else{
 					res.redirect('/password?username=' + req.body.username);
 				}
@@ -616,7 +616,7 @@ app.post('/done', function(req, res){
 app.get('/payment', function(req, res){
 	if (req.session.username){		
 		var payments = [];
-		connection.query('SELECT reservation.resID, resStatus, payID, payDate, transStatus, tentativePaid, totalAmount, paidAmount, miscFee, contactNo, CONCAT(customer.firstName, " ", customer.lastName) AS customerName FROM paymentdetails JOIN transaction ON paymentdetails.transID = transaction.transID JOIN reservation ON transaction.resID = reservation.resID JOIN customer ON reservation.custID = customer.custID JOIN car ON reservation.carID = car.carID', function(err, rows1){
+		connection.query("SELECT reservation.resID, resStatus, payID, payDate, transStatus, tentativePaid, totalAmount, paidAmount, miscFee, contactNo, CONCAT(customer.firstName, ' ', customer.lastName) AS customerName FROM paymentdetails JOIN transaction ON paymentdetails.transID = transaction.transID JOIN reservation ON transaction.resID = reservation.resID JOIN customer ON reservation.custID = customer.custID JOIN car ON reservation.carID = car.carID WHERE spID='?'", req.session.userID, function(err, rows1){
 			if (err) {console.log(err); return}
 
 			rows1.forEach(function(item){

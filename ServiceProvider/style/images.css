@@ -3,11 +3,11 @@
 }
 
 body {
-	background-color: #85929E;
+	background-color: black;
 }
 
 #home {
-	background-image: url("43.jpg"); 
+	background-image: url("CarGo.png"); 
     background-repeat: no-repeat;	
     background-attachment: relative; 
 }
