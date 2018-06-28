@@ -1,0 +1,12 @@
+Steps:
+
+1. Uninstall yung nodejs
+2. Install yung nodejs version 8 
+3. make sure yung wamp version is 4.7 
+4. after installation yung firewall na
+5. sa wamp yung iuuncomment mo 
+6. yung ilalagay mo sa virtual conf
+7. irun mo yung app.js sa serviceprovider folder gamit ng code na --- node app
+8. netbeans para sa customer 
+9. present niyo na 
+
